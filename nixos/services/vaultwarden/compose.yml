@@ -4,7 +4,7 @@ name: vaultwarden-container
 
 services:
   bitwarden:
-    image: docker.io/library/vaultwarden/server:latest
+    image: docker.io/vaultwarden/server:latest
     container_name: vaultwarden
     restart: always
     environment:
