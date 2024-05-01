@@ -11,12 +11,6 @@ services:
       - WEBSOCKET_ENABLED=true
       - SIGNUPS_ALLOWED=false
       - DOMAIN
-      - SMTP_HOST
-      - SMTP_FROM
-      - SMTP_PORT=465
-      - SMTP_SECURITY=force_tls
-      - SMTP_USERNAME
-      - SMTP_PASSWORD
       - ADMIN_TOKEN
     volumes:
       - ./vw-data:/data

@@ -19,8 +19,6 @@
     image = "docker.io/vaultwarden/server:latest";
     environment = {
       SIGNUPS_ALLOWED = "false";
-      SMTP_PORT = "465";
-      SMTP_SECURITY = "force_tls";
       WEBSOCKET_ENABLED = "true";
     };
     volumes = [
