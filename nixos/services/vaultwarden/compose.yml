@@ -1,0 +1,25 @@
+version: "3"
+
+name: vaultwarden-container
+
+services:
+  bitwarden:
+    image: docker.io/library/vaultwarden/server:latest
+    container_name: vaultwarden
+    restart: always
+    environment:
+      - WEBSOCKET_ENABLED=true
+      - SIGNUPS_ALLOWED=false
+      - DOMAIN=${DOMAIN}
+      - SMTP_HOST=${SMTP_HOST}
+      - SMTP_FROM=${SMTP_FROM}
+      - SMTP_PORT=465
+      - SMTP_SECURITY=force_tls
+      - SMTP_USERNAME=${SMTP_USERNAME}
+      - SMTP_PASSWORD=${SMTP_PASSWORD}
+      - ADMIN_TOKEN=${ADMIN_TOKEN}
+    volumes:
+      - ./vw-data:/data
+    ports:
+      - 8950:80
+      - 3012:3012

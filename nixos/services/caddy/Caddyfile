@@ -1,0 +1,136 @@
+# The Caddyfile is an easy way to configure your Caddy web server.
+#
+# https://caddyserver.com/docs/caddyfile
+
+
+# The configuration below serves a welcome page over HTTP on port 80.  To use
+# your own domain name with automatic HTTPS, ensure your A/AAAA DNS record is
+# pointing to this machine's public IP, then replace `http://` with your domain
+# name.  Refer to the documentation for full instructions on the address
+# specification.
+#
+# https://caddyserver.com/docs/caddyfile/concepts#addresses
+{
+	order log first
+	acme_dns porkbun {
+		api_key {env.PORKBUN_API_KEY}
+		api_secret_key {env.PORKBUN_SECRET_API_KEY}
+	}
+}
+
+*.fuzzle.uk, fuzzle.uk {
+	# @nextcloudadmin host nextcloud-admin.fuzzle.uk
+	# handle @nextcloudadmin {
+	# 	reverse_proxy https://localhost:8080 {
+	#            transport http {
+	#                tls_insecure_skip_verify
+	#            }
+	#        }
+	# }
+	#
+	# @nextcloud host nextcloud.fuzzle.uk
+	# handle @nextcloud {
+	# 	reverse_proxy localhost:11000
+	# 	log {
+	# 		output file /var/log/caddy/nextcloud.log
+	# 		format json
+	# 	}
+	# }
+	#
+	# @cockpit host cockpit.fuzzle.uk
+	# handle @cockpit {
+	# 	reverse_proxy localhost:9090 {
+	# 		transport http {
+	# 			tls
+	# 			tls_insecure_skip_verify
+	# 		}
+	# 	}
+	# }
+	#
+	# @foundry host foundry.fuzzle.uk
+	# handle @foundry {
+	# 	reverse_proxy localhost:30000
+	# }
+
+	@bitwarden host bitwarden.fuzzle.uk
+	handle @bitwarden {
+		reverse_proxy localhost:8950
+	}
+
+	# @mopidyweb host spotify.fuzzle.uk
+	# handle @mopidyweb {
+	# 	reverse_proxy localhost:6680
+	# }
+	#
+	# @foundry2 host foundry2.fuzzle.uk
+	# handle @foundry2 {
+	# 	reverse_proxy localhost:30001
+	# }
+	#
+	# @funkwhale host funkwhale.fuzzle.uk
+	# handle @funkwhale {
+	# 	reverse_proxy localhost:5000
+	# }
+	#
+	# @files host files.fuzzle.uk
+	# handle @files {
+	# 	root * /var/www/public_data
+	# 	file_server {
+	# 		browse
+	# 	}
+	# }
+	#
+	# @calibre host calibre.fuzzle.uk
+	# handle @calibre {
+	# 	reverse_proxy localhost:8083
+	# }
+	#
+	# @jellyfin host jellyfin.fuzzle.uk
+	# handle @jellyfin {
+	# 	reverse_proxy localhost:8096
+	# }
+
+	@base host fuzzle.uk
+	handle @base {
+		# @matrix {
+		# 	path /_matrix/*
+		# 	path /_synapse/client/*
+		# }
+		# handle @matrix {
+		# 	reverse_proxy /_matrix/* localhost:8008
+		# 	reverse_proxy /_synapse/client/* localhost:8008
+		# }
+		#
+		# handle /keybase.txt {
+		# 	root * /var/www
+		# 	file_server
+		# }
+		#
+		# handle /.well-known/matrix/client {
+		# 	header Access-Control-Allow-Origin *
+		# 	respond ` {
+		# 		"m.homeserver": {
+		# 			"base_url": "https://fuzzle.uk"
+		# 		}
+		# 	}			`
+		# }
+
+		handle {
+			respond "Nothing to see here yet, go away!"
+		}
+	}
+
+	@base8448 host fuzzle.uk:8448
+	handle @base8448 {
+		reverse_proxy http://localhost:8008
+	}
+
+	handle {
+		redir https://fuzzle.uk
+	}
+}
+
+# As an alternative to editing the above site block, you can add your own site
+# block files in the Caddyfile.d directory, and they will be included as long
+# as they use the .caddyfile extension.
+import Caddyfile.d/*.caddyfile
