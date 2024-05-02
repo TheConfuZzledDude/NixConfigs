@@ -27,7 +27,7 @@
     group = config.services.caddy.group;
   };
 
-  systemd.services.caddy.serviceConfig.EnvironmentFile = config.sops.secrets.caddy-env.path;
+  systemd.services.caddy.serviceConfig.EnvironmentFile = lib.mkForce config.sops.secrets.caddy-env.path;
 
   networking.firewall.allowedTCPPorts = [80 443];
 }
