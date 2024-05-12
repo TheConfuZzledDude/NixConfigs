@@ -16,6 +16,18 @@
     sops-nix.url = "github:Mic92/sops-nix";
 
     flake-parts.url = "github:hercules-ci/flake-parts";
+
+    neovim-nightly-overlay.url = "github:nix-community/neovim-nightly-overlay";
+  };
+
+  nixConfig = {
+    experimental-features = "auto-allocate-uids flakes nix-command repl-flake";
+    extra-substituters = [
+      "https://nix-community.cachix.org"
+    ];
+    extra-trusted-public-keys = [
+      "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
+    ];
   };
 
   outputs = inputs @ {
@@ -23,13 +35,13 @@
     flake-parts,
     ...
   }:
-    flake-parts.lib.mkFlake {inherit self inputs;}
+    flake-parts.lib.mkFlake {inherit inputs;}
     ({
-      self,
       inputs,
       withSystem,
       ...
     }: let
+      self = inputs.self;
       inherit (self) outputs;
     in {
       systems = [
@@ -41,12 +53,14 @@
       ];
 
       perSystem = {
+        inputs',
         pkgs,
         lib,
         config,
+        system,
         ...
-      }: {
-        packages = import ./pkgs pkgs;
+      } @ ctx: {
+        packages = import ./pkgs ({inherit inputs;} // ctx);
         formatter = pkgs.alejandra;
       };
 
@@ -77,11 +91,21 @@
         # Available through 'home-manager --flake .#your-username@your-hostname'
         homeConfigurations = {
           # FIXME replace with your username@hostname
-          "zuzi@ZacharyArchDesktop" = withSystem "x86_64-linux" (ctx @ {...}:
+          "zuzi@ZacharyArchDesktop" = withSystem "x86_64-linux" (ctx @ {
+            system,
+            inputs',
+            self',
+            ...
+          }:
             inputs.home-manager.lib.homeManagerConfiguration {
-              pkgs = inputs.nixpkgs-unstable.legacyPackages."x86_64-linux";
+              pkgs = import inputs.nixpkgs-unstable {
+                inherit system;
+                overlays = [
+                  inputs.neovim-nightly-overlay.overlays.default
+                ];
+              };
               extraSpecialArgs = {
-                inherit inputs outputs;
+                inherit outputs inputs inputs' self' system;
               };
               modules = [
                 # > Our main home-manager configuration file <

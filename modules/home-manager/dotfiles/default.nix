@@ -20,14 +20,12 @@
   };
 
   config = {
-    programs.home-manager.path = lib.mkForce "$HOME/${config.nix-config-path}";
-
-    home.extraActivationPath = with pkgs; [git];
+    home.extraActivationPath = with pkgs; [git openssh];
 
     home.activation = {
       myActivationAction = lib.hm.dag.entryAfter ["writeBoundary"] ''
         run --quiet git clone $VERBOSE_ARG "https://github.com/TheConfuZzledDude/NixConfigs.git" "$HOME/${config.nix-config-path}"  \
-          || git -C "$HOME/${config.nix-config-path}" pull
+          || git -C "$HOME/${config.nix-config-path}" pull --ff-only || true
       '';
     };
   };
