@@ -20,6 +20,8 @@
   };
 
   config = {
+    programs.home-manager.path = lib.mkForce "$HOME/${config.nix-config-path}";
+
     home.extraActivationPath = with pkgs; [git];
 
     home.activation = {
