@@ -1,0 +1,27 @@
+{
+  "neodev": {
+    "library": {
+      "enabled": true,
+      "plugins": true
+    }
+  },
+  "neoconf": {
+    "plugins": {
+      "lua_ls": {
+        "enabled": true
+      },
+      "jsonls": {
+        "configured_servers_only": false
+      }
+    }
+  },
+  "lspconfig": {
+    "nil_ls": {
+      "nil": {
+        "formatting": {
+          "command": ["alejandra"]
+        }
+      }
+    }
+  }
+}
