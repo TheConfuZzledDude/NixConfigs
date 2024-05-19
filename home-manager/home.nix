@@ -51,7 +51,7 @@
 
   # programs.home-manager.enable = true;
 
-  home.packages = [
+  home.packages = with pkgs; [
     (pkgs.symlinkJoin
       {
         name = "home-manager-wrapped";
@@ -64,7 +64,21 @@
             --add-flags "--flake ${config.home.homeDirectory}/${config.nix-config-path}"
         '';
       })
-    pkgs.neovim
+    gitFull
+    gcc
+    gitui
+    openssh
+    gpg-tui
+    gnupg
+    yazi
+    wl-clipboard
+    bat
+    fd
+    ripgrep
+    ripgrep-all
+    gh
+    zoxide
+    wslu
   ];
 
   # Nicely reload system units when changing configs

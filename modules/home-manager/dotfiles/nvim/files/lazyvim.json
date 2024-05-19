@@ -1,13 +1,12 @@
 {
   "extras": [
+    "lazyvim.plugins.extras.dap.core",
     "lazyvim.plugins.extras.coding.native_snippets",
     "lazyvim.plugins.extras.coding.yanky",
-    "lazyvim.plugins.extras.dap.core",
     "lazyvim.plugins.extras.dap.nlua",
     "lazyvim.plugins.extras.editor.dial",
     "lazyvim.plugins.extras.editor.mini-diff",
     "lazyvim.plugins.extras.editor.navic",
-    "lazyvim.plugins.extras.editor.trouble-v3",
     "lazyvim.plugins.extras.formatting.black",
     "lazyvim.plugins.extras.formatting.prettier",
     "lazyvim.plugins.extras.lang.clangd",
@@ -23,10 +22,11 @@
     "lazyvim.plugins.extras.ui.edgy",
     "lazyvim.plugins.extras.util.dot",
     "lazyvim.plugins.extras.util.project",
-    "plugins.extras.typescript-tools"
+    "plugins.extras.typescript-tools",
+    "lazyvim.plugins.extras.editor.trouble-v3"
   ],
   "news": {
-    "NEWS.md": "3314"
+    "NEWS.md": "4885"
   },
   "version": 3
 }

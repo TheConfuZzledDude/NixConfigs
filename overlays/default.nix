@@ -1,2 +1,2 @@
 # This file defines overlays
-{ inputs, ... } @ ctx: { }
+{inputs, ...} @ ctx: {}
