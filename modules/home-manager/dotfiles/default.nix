@@ -1,9 +1,7 @@
 {
-  inputs,
-  outputs,
-  lib,
   config,
   pkgs,
+  lib,
   ...
 }: {
   imports = [
@@ -11,8 +9,8 @@
   ];
 
   options = {
-    nix-config-path = lib.mkOption {
-      type = lib.types.str;
+    nix-config-path = pkgs.lib.mkOption {
+      type = pkgs.lib.types.str;
       default = ".NixConfig";
       defaultText = ".NixConfig";
       description = "NixConfig directory";

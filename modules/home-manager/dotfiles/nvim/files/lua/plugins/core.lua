@@ -132,4 +132,14 @@ return {
       open_for_directories = false,
     },
   },
+  {
+    "nvim-telescope/telescope.nvim",
+    opts = {
+      pickers = {
+        find_files = {
+          follow = true,
+        },
+      },
+    },
+  },
 }

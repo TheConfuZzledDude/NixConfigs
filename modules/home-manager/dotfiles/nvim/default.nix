@@ -1,12 +1,9 @@
 {
-  inputs,
-  outputs,
-  lib,
   config,
   pkgs,
+  lib,
   ...
-} @ ctx: let
-in {
+} @ ctx: {
   config = {
     xdg.configFile = let
       nvim-path = "${config.home.homeDirectory}/${config.nix-config-path}/modules/home-manager/dotfiles/nvim/files";
@@ -22,37 +19,41 @@ in {
     programs.java.enable = true;
     programs.java.package = pkgs.temurin-bin;
 
-    home.packages = with pkgs; [
-      (pkgs.symlinkJoin
-        {
-          name = "neovim-wrapped";
-          paths = [pkgs.neovim];
-          buildInputs = [pkgs.makeBinaryWrapper];
-          postBuild = ''
-            wrapProgram $out/bin/nvim \
-               --prefix LIBSQLITE : ${sqlite.out}/lib/libsqlite3.so
-          '';
-        })
-
-      rustup
-      (ctx.lib.hiPrio gcc)
-      clang
-      llvmPackages.bintools
-      ranger
-      nodejs
-      python3Full
-      python3Packages.pip
-      python3Packages.pynvim
-      luajit
-      luarocks
-      go
-      unzip
-      sqlite.bin
-      sqlite.out
-      sqlite.dev
-      nixd
-      ripgrep
-      fd
-    ];
+    home.packages =
+      [
+        (pkgs.symlinkJoin
+          {
+            name = "neovim-wrapped-custom";
+            paths = [pkgs.neovim];
+            buildInputs = [pkgs.makeBinaryWrapper];
+            postBuild = ''
+              wrapProgram $out/bin/nvim \
+                 --prefix LIBSQLITE : ${pkgs.sqlite.outPath}/lib/libsqlite3.so
+            '';
+          })
+      ]
+      ++ [
+        pkgs.clang
+        (lib.hiPrio pkgs.gcc)
+        pkgs.llvmPackages.bintools
+      ]
+      ++ (with pkgs; [
+        rustup
+        ranger
+        nodejs
+        python3Full
+        python3Packages.pip
+        python3Packages.pynvim
+        luajit
+        luarocks
+        go
+        unzip
+        sqlite.bin
+        sqlite.out
+        sqlite.dev
+        nixd
+        ripgrep
+        fd
+      ]);
   };
 }
