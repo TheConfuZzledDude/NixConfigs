@@ -1,13 +1,14 @@
 # This is your system's configuration file.
 # Use this to configure your system environment (it replaces /etc/nixos/configuration.nix)
 {
-  inputs,
-  self,
+  flake,
   lib,
-  config,
   pkgs,
+  config,
   ...
-}: {
+}: let
+  inherit (flake) inputs self;
+in {
   # You can import other NixOS modules here
   imports = [
     inputs.sops-nix.nixosModules.sops
@@ -27,38 +28,13 @@
     ./services
   ];
 
-  sops.defaultSopsFile = ../secrets.yaml;
+  sops.defaultSopsFile = ../../secrets.yaml;
   sops.age.sshKeyPaths = ["/etc/ssh/ssh_host_ed25519_key"];
   # This is using an age key that is expected to already be in the filesystem
   sops.age.keyFile = "/var/lib/sops-nix/key.txt";
   # This will generate a new key if the key specified above does not exist
   sops.age.generateKey = true;
   # This is the actual specification of the secrets.
-
-  nixpkgs = {
-    # You can add overlays here
-    overlays = [
-      # Add overlays your own flake exports (from overlays and pkgs dir):
-      self.overlays.additions
-      self.overlays.modifications
-      self.overlays.unstable-packages
-
-      # You can also add overlays exported from other flakes:
-      # neovim-nightly-overlay.overlays.default
-
-      # Or define it inline, for example:
-      # (final: prev: {
-      #   hi = final.hello.overrideAttrs (oldAttrs: {
-      #     patches = [ ./change-hello-to-hi.patch ];
-      #   });
-      # })
-    ];
-    # Configure your nixpkgs instance
-    config = {
-      # Disable if you don't want unfree packages
-      allowUnfree = true;
-    };
-  };
 
   nix = let
     flakeInputs = lib.filterAttrs (_: lib.isType "flake") inputs;
@@ -157,6 +133,9 @@
   environment.systemPackages = with pkgs; [
     wezterm
     zellij
+    eza
+    ripgrep
+    ripgrep-all
     fish
     neovim
     bat

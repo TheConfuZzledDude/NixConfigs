@@ -2,9 +2,11 @@ return {
   {
     "catppuccin/nvim",
     name = "catppuccin",
+    ---@type CatppuccinOptions
     opts = {
       flavour = "frappe",
-      transparent_background = true,
+      transparent_background = not vim.g.neovide,
+      term_colors = true,
     },
   },
 
@@ -17,9 +19,10 @@ return {
 
   {
     "rcarriga/nvim-notify",
-    ---@type notify.Config
+    ---@class Config.Notify : notify.Config
+    ---@type Config.Notify
     opts = {
-      background_colour = "#000000",
+      background_colour = vim.g.neovide and "#000000" or nil,
     },
   },
 }

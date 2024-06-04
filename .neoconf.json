@@ -5,8 +5,11 @@
         "expr": "import (builtins.getFlake (\"git+file://\" + toString ./.)).inputs.nixpkgs {}"
       },
       "nixd.options": {
+        "nixos-laptop": {
+          "expr": "(builtins.getFlake (\"git+file://\" + toString ./.)).nixosConfigurations.ZacharyNixWSL.options"
+        },
         "home_manager": {
-          "expr": "(builtins.getFlake (\"git+file://\" + toString ./.)).homeConfigurations.\"zuzi@ZacharyArchDesktop\".options"
+          "expr": "(builtins.getFlake (\"git+file://\" + toString ./.)).homeConfigurations.zuzi.options"
         },
         "flake-parts": {
           "expr": "(builtins.getFlake (\"git+file://\" + toString ./.)).debug.options"

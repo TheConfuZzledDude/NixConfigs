@@ -19,6 +19,30 @@
 }
 
 *.fuzzle.uk, fuzzle.uk {
+	@davis host davis.fuzzle.uk
+	handle @davis {
+		encode zstd gzip
+		header {
+			-Server
+			-X-Powered-By
+
+			# enable HSTS
+			Strict-Transport-Security max-age=31536000;
+
+			# disable clients from sniffing the media type
+			X-Content-Type-Options nosniff
+
+			# keep referrer data off of HTTP connections
+			Referrer-Policy no-referrer-when-downgrade
+		}
+		root * {env.DAVIS_ROOT}
+		php_fastcgi {env.DAVIS_SOCKET_PATH}
+		file_server
+
+		redir /.well-known/carddav /dav
+		redir /.well-known/caldav /dav
+	}
+
 	# @nextcloudadmin host nextcloud-admin.fuzzle.uk
 	# handle @nextcloudadmin {
 	# 	reverse_proxy https://localhost:8080 {

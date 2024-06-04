@@ -33,7 +33,14 @@ in {
     caddy_pkg
   ];
 
-  systemd.services.caddy.serviceConfig.EnvironmentFile = lib.mkForce config.sops.secrets.caddy-env.path;
-
+  systemd.services.caddy = {
+      serviceConfig.EnvironmentFile = lib.mkForce [
+          config.sops.secrets.caddy-env.path
+          (pkgs.writeText "caddy-additional-env.env" ''
+            DAVIS_SOCKET_PATH=${config.services.phpfpm.pools.davis.socket}
+            DAVIS_ROOT=${config.services.davis.package}/public
+          '')
+      ];
+  };
   networking.firewall.allowedTCPPorts = [80 443];
 }

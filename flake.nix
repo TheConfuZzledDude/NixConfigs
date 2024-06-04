@@ -1,9 +1,12 @@
 {
   description = "A fuzzy flake";
 
-  inputs = {
+  inputs = rec {
     # Nixpkgs
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
+    nixpkgs-24-05.url = "github:nixos/nixpkgs/nixos-24.05";
+
+    nixpkgs-stable = nixpkgs-24-05;
 
     # Home manager
     home-manager.url = "github:nix-community/home-manager";
@@ -14,6 +17,7 @@
 
     flake-parts.url = "github:hercules-ci/flake-parts";
     nixos-flake.url = "github:srid/nixos-flake";
+    nixos-wsl.url = "github:nix-community/NixOS-WSL/main";
 
     neovim-nightly-overlay.url = "github:nix-community/neovim-nightly-overlay";
 
@@ -41,7 +45,9 @@
     ];
   };
 
-  outputs = inputs @ {self, ...}:
+  outputs = inputs @ {self, ...}: let
+    flake-root = ./.;
+  in
     inputs.flake-parts.lib.mkFlake {inherit inputs;}
     {
       systems = [
@@ -55,6 +61,8 @@
         inputs.nixos-flake.flakeModule
         ./modules/home-manager
       ];
+
+      _module.args.pkgs = inputs.nixpkgs.legacyPackages;
 
       perSystem = {
         self',
@@ -98,17 +106,23 @@
 
         legacyPackages.homeConfigurations = {
           # FIXME replace with your username@hostname
-          zuzi = self.nixos-flake.lib.mkHomeConfiguration pkgs {
-            imports = [
-              self.homeManagerModules.standard
+          zuzi = inputs.home-manager.lib.homeManagerConfiguration {
+            inherit pkgs;
+            extraSpecialArgs = lib.recursiveUpdate self.nixos-flake.lib.specialArgsFor.common {flake.root = flake-root;};
+            modules = [
+              {
+                imports = [
+                  self.homeManagerModules.standard
+                ];
+                targets.genericLinux.enable = true;
+                home = {
+                  username = "zuzi";
+                  homeDirectory = "/home/zuzi";
+                };
+                systemd.user.startServices = "sd-switch";
+                home.stateVersion = "24.05";
+              }
             ];
-            targets.genericLinux.enable = true;
-            home = {
-              username = "zuzi";
-              homeDirectory = "/home/zuzi";
-            };
-            systemd.user.startServices = "sd-switch";
-            home.stateVersion = "24.05";
           };
 
           "zuzi@ZacharyNixWSL" = self.nixos-flake.lib.mkHomeConfiguration pkgs {
@@ -139,20 +153,37 @@
         nixosConfigurations = {
           fuzzle-server-1 = self.nixos-flake.lib.mkLinuxSystem {
             nixpkgs.hostPlatform = "x86_64-linux";
+            nixpkgs.pkgs = inputs.nixpkgs-stable.legacyPackages."x86_64-linux";
             imports = [
-              ./nixos/configuration.nix
-              self.lix-module.nixosModules.default
+              ./nixos/fuzzle-server/configuration.nix
+              inputs.lix-module.nixosModules.default
               self.nixosModules.home-manager
-              {
+              ( {lib, ...}: {
+                home-manager.useGlobalPkgs = lib.mkForce false;
                 home-manager.users.zuzi = {
-                  imports = [
-                    self.homeManagerModules.standard
-                  ];
-                  home.stateVersion = "24.05";
+                    _module.args.pkgs = lib.mkForce inputs.nixpkgs.legacyPackages."x86_64-linux";
+                    imports = [
+                        self.homeManagerModules.standard
+                    ];
+                    home.stateVersion = "24.05";
                 };
-              }
+              } )
             ];
           };
+          ZacharyNixWSL =
+            self.nixos-flake.lib.mkLinuxSystem
+            {
+              nixpkgs.hostPlatform = "x86_64-linux";
+              imports = [
+                ./nixos/wsl-laptop/configuration.nix
+                inputs.lix-module.nixosModules.default
+                self.nixosModules.home-manager
+                self.nixos-wsl
+                {
+                  home-manager.users.zuzi = self.legacyPackages."x86_64-linux".homeConfigurations."zuzi@ZacharyNixWSL";
+                }
+              ];
+            };
         };
       };
     };

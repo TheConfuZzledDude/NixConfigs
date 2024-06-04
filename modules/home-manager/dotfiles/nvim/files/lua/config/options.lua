@@ -75,5 +75,13 @@ if vim.regex("\\cMicrosoft"):match_str(vim.fn.system("uname -r")) and vim.g.neov
   }
 end
 
+if vim.g.neovide then
+  vim.g.neovide_transparency = 0.97
+  vim.g.neovide_scroll_animation_length = 0.1
+  vim.g.neovide_scroll_animation_far_lines = 0
+  vim.g.neovide_position_animation_length = 0.1
+  vim.g.experimental_layer_grouping = true
+end
+
 -- Fix markdown indentation settings
 vim.g.markdown_recommended_style = 0

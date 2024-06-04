@@ -50,12 +50,6 @@ return {
     },
   },
   {
-    "kevinhwang91/rnvimr",
-    keys = {
-      { "<leader>r", "<cmd>RnvimrToggle<cr>", mode = "n", desc = "Open Ranger" },
-    },
-  },
-  {
     "folke/zen-mode.nvim",
     ---@type ZenOptions
     opts = {
@@ -139,6 +133,25 @@ return {
         find_files = {
           follow = true,
         },
+      },
+    },
+  },
+  {
+    "isobit/vim-caddyfile",
+  },
+  {
+    "stevearc/conform.nvim",
+    ---@type ConformOpts
+    opts = {
+      formatters = {
+        caddyfmt = {
+          command = "caddy",
+          args = { "fmt", "-" },
+          stdin = true,
+        },
+      },
+      formatters_by_ft = {
+        caddyfile = { "caddyfmt" },
       },
     },
   },
