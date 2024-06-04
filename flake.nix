@@ -152,22 +152,23 @@
         # Available through 'nixos-rebuild --flake .#your-hostname'
         nixosConfigurations = {
           fuzzle-server-1 = self.nixos-flake.lib.mkLinuxSystem {
+            nix.registry.nixpkgs.flake = inputs.nixpkgs.lib.mkForce inputs.nixpkgs-stable;
             nixpkgs.hostPlatform = "x86_64-linux";
-            nixpkgs.pkgs = inputs.nixpkgs-stable.legacyPackages."x86_64-linux";
+            nixpkgs.flake.source = inputs.nixpkgs.lib.mkForce inputs.nixpkgs-stable.outPath;
             imports = [
               ./nixos/fuzzle-server/configuration.nix
               inputs.lix-module.nixosModules.default
               self.nixosModules.home-manager
-              ( {lib, ...}: {
+              ({lib, ...}: {
                 home-manager.useGlobalPkgs = lib.mkForce false;
                 home-manager.users.zuzi = {
-                    _module.args.pkgs = lib.mkForce inputs.nixpkgs.legacyPackages."x86_64-linux";
-                    imports = [
-                        self.homeManagerModules.standard
-                    ];
-                    home.stateVersion = "24.05";
+                  _module.args.pkgs = lib.mkForce inputs.nixpkgs.legacyPackages."x86_64-linux";
+                  imports = [
+                    self.homeManagerModules.standard
+                  ];
+                  home.stateVersion = "24.05";
                 };
-              } )
+              })
             ];
           };
           ZacharyNixWSL =

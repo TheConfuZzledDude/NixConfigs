@@ -1,4 +1,9 @@
-{flake, lib, config, ...}: {
+{
+  flake,
+  lib,
+  config,
+  ...
+}: {
   imports = [
     ./vaultwarden
     ./caddy
@@ -20,7 +25,6 @@
 
     # Can't disable this for some reason, is set to null by default, but not the correct type
     nginx = {};
-
   };
   services.nginx.enable = lib.mkForce false;
 }

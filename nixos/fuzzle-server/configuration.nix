@@ -36,6 +36,16 @@ in {
   sops.age.generateKey = true;
   # This is the actual specification of the secrets.
 
+  nixpkgs = {
+    # You can add overlays here
+    overlays = [];
+    # Configure your nixpkgs instance
+    config = {
+      # Disable if you don't want unfree packages
+      allowUnfree = true;
+    };
+  };
+
   nix = let
     flakeInputs = lib.filterAttrs (_: lib.isType "flake") inputs;
   in {
