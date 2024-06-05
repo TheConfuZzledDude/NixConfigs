@@ -26,6 +26,10 @@
     # Can't disable this for some reason, is set to null by default, but not the correct type
     nginx = {};
 
+    config = {
+        LOG_FILE_PATH = lib.mkForce "/dev/stderr";
+    };
+
     poolConfig = {
       "listen.owner" = config.services.caddy.user;
       "listen.group" = config.services.caddy.group;
