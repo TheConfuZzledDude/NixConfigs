@@ -36,7 +36,7 @@
 			Referrer-Policy no-referrer-when-downgrade
 		}
 		root * {env.DAVIS_ROOT}
-		php_fastcgi {env.DAVIS_SOCKET_PATH}
+		php_fastcgi unix/{env.DAVIS_SOCKET_PATH}
 		file_server
 
 		redir /.well-known/carddav /dav

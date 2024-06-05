@@ -25,6 +25,11 @@
 
     # Can't disable this for some reason, is set to null by default, but not the correct type
     nginx = {};
+
+    poolConfig = {
+      "listen.owner" = config.services.caddy.user;
+      "listen.group" = config.services.caddy.group;
+    };
   };
   services.nginx.enable = lib.mkForce false;
 }
