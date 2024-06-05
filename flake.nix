@@ -128,7 +128,7 @@
           "zuzi@ZacharyNixWSL" = self.nixos-flake.lib.mkHomeConfiguration pkgs {
             imports = [
               self.homeManagerModules.standard
-              self.homeMangerModules.wsl
+              self.homeManagerModules.wsl
             ];
             home = {
               username = "zuzi";
@@ -179,9 +179,20 @@
                 ./nixos/wsl-laptop/configuration.nix
                 inputs.lix-module.nixosModules.default
                 self.nixosModules.home-manager
-                self.nixos-wsl
+                inputs.nixos-wsl.nixosModules.default
                 {
-                  home-manager.users.zuzi = self.legacyPackages."x86_64-linux".homeConfigurations."zuzi@ZacharyNixWSL";
+                  home-manager.users.zuzi = {
+                    imports = [
+                      self.homeManagerModules.standard
+                      self.homeManagerModules.wsl
+                    ];
+                    home = {
+                      username = "zuzi";
+                      homeDirectory = "/home/zuzi";
+                    };
+                    systemd.user.startServices = "sd-switch";
+                    home.stateVersion = "24.05";
+                  };
                 }
               ];
             };

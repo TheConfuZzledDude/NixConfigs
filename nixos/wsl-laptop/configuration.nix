@@ -33,6 +33,13 @@ in {
     nixPath = lib.mapAttrsToList (n: _: "${n}=flake:${n}") flakeInputs;
   };
 
+  nixpkgs = {
+    overlays = [
+      flake.inputs.neovim-nightly-overlay.overlays.default
+    ];
+    config = {allowUnfree = true;};
+  };
+
   wsl.enable = true;
   wsl.defaultUser = "zuzi";
   wsl.useWindowsDriver = false;
