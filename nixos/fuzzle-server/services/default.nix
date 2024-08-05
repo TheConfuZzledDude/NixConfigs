@@ -7,6 +7,7 @@
   imports = [
     ./vaultwarden
     ./caddy
+    ./foundry
   ];
 
   services.tailscale.enable = true;
