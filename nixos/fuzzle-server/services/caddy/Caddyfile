@@ -71,10 +71,10 @@
 	# 	}
 	# }
 	#
-	# @foundry host foundry.fuzzle.uk
-	# handle @foundry {
-	# 	reverse_proxy localhost:30000
-	# }
+	@foundry host foundry.fuzzle.uk
+	handle @foundry {
+		reverse_proxy localhost:30000
+	}
 
 	@bitwarden host bitwarden.fuzzle.uk
 	handle @bitwarden {

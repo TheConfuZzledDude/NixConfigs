@@ -8,7 +8,7 @@
 }: {
   imports = [
     # Regenerate with `compose2nix --inputs=compose.yml --output=compose.nix`
-    #TODO: Generate this automatically and import it  with IFD?
+    #TODO: Generate this automatically and import it with IFD?
     ./compose.nix
   ];
 

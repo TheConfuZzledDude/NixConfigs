@@ -155,4 +155,27 @@ return {
       },
     },
   },
+  {
+    "folke/lazydev.nvim",
+    dependencies = {
+      "justinsgithub/wezterm-types",
+      "LuaCATS/love2d",
+    },
+    ---@class lazydev.Config
+    opts = {
+      library = {
+        {
+          path = "wezterm-types",
+          mods = { "wezterm" },
+        },
+        {
+          path = "love2d",
+          words = { "love" },
+        },
+      },
+    },
+  },
+  {
+    "rpdelaney/vim-sourcecfg",
+  },
 }
