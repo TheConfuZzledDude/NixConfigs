@@ -36,11 +36,13 @@
 			Referrer-Policy no-referrer-when-downgrade
 		}
 		root * {env.DAVIS_ROOT}
-		php_fastcgi unix/{env.DAVIS_SOCKET_PATH}
+		php_fastcgi unix/{env.DAVIS_SOCKET_PATH} {
+			capture_stderr
+		}
 		file_server
 
-		redir /.well-known/carddav /dav
-		redir /.well-known/caldav /dav
+		redir /.well-known/carddav /dav/ 301
+		redir /.well-known/caldav /dav/ 301
 	}
 
 	# @nextcloudadmin host nextcloud-admin.fuzzle.uk
