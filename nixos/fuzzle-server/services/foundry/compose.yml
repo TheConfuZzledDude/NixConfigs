@@ -10,6 +10,7 @@ services:
     volumes:
       - foundry-data:/data
     environment:
+      - UV_THREADPOOL_SIZE=8
       - FOUNDRY_LICENSE_KEY
       - FOUNDRY_ADMIN_KEY
     ports:
