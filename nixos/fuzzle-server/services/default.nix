@@ -28,7 +28,7 @@
     nginx = {};
 
     config = {
-        LOG_FILE_PATH = lib.mkForce "/dev/stderr";
+      LOG_FILE_PATH = lib.mkForce "/dev/stderr";
     };
 
     poolConfig = {
@@ -36,5 +36,6 @@
       "listen.group" = config.services.caddy.group;
     };
   };
+
   services.nginx.enable = lib.mkForce false;
 }

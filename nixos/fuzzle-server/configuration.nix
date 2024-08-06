@@ -92,8 +92,9 @@ in {
     enable = true;
     allowedTCPPorts = [22 80 443];
 
-    interfaces.podman1 = {
+    interfaces."podman+" = {
       allowedUDPPorts = [53];
+      allowedTCPPorts = [53];
     };
   };
 
