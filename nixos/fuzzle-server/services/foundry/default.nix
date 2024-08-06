@@ -14,4 +14,6 @@
   virtualisation.oci-containers.containers."foundry-container-foundry".environmentFiles = [
     config.sops.secrets.foundry-env.path
   ];
+
+  virtualisation.oci-containers.containers."foundry-container-foundry".environment."UV_THREADPOOL_SIZE" = 16;
 }
