@@ -5,8 +5,9 @@
     # Nixpkgs
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
     nixpkgs-24-05.url = "github:nixos/nixpkgs/nixos-24.05";
+    nixpkgs-24-11.url = "github:nixos/nixpkgs/nixos-24.11";
 
-    nixpkgs-stable = nixpkgs-24-05;
+    nixpkgs-stable = nixpkgs-24-11;
 
     # Home manager
     home-manager.url = "github:nix-community/home-manager";
@@ -16,18 +17,13 @@
     sops-nix.inputs.nixpkgs.follows = "nixpkgs";
 
     flake-parts.url = "github:hercules-ci/flake-parts";
-    nixos-flake.url = "github:srid/nixos-flake";
+    nixos-unified.url = "github:srid/nixos-unified";
     nixos-wsl.url = "github:nix-community/NixOS-WSL/main";
 
     neovim-nightly-overlay.url = "github:nix-community/neovim-nightly-overlay";
 
-    lix = {
-      url = "git+https://git@git.lix.systems/lix-project/lix?ref=refs/tags/2.90-beta.1";
-      flake = false;
-    };
     lix-module = {
-      url = "git+https://git.lix.systems/lix-project/nixos-module";
-      inputs.lix.follows = "lix";
+      url = "https://git.lix.systems/lix-project/nixos-module/archive/2.92.0-3.tar.gz";
       inputs.nixpkgs.follows = "nixpkgs";
     };
   };
@@ -46,9 +42,12 @@
   };
 
   outputs = inputs @ {self, ...}: let
-    flake-root = ./.;
+    root = ./.;
   in
-    inputs.flake-parts.lib.mkFlake {inherit inputs;}
+    inputs.flake-parts.lib.mkFlake
+    {
+      inherit inputs;
+    }
     {
       systems = [
         "aarch64-linux"
@@ -58,7 +57,7 @@
         "x86_64-darwin"
       ];
       imports = [
-        inputs.nixos-flake.flakeModule
+        inputs.nixos-unified.flakeModule
         ./modules/home-manager
       ];
 
@@ -71,10 +70,10 @@
         system,
         ...
       }: {
-        nixos-flake.primary-inputs = [
+        nixos-unified.primary-inputs = [
           "nixpkgs"
           "home-manager"
-          "nixos-flake"
+          "nixos-unified"
           "neovim-nightly-overlay"
         ];
 
@@ -108,7 +107,7 @@
           # FIXME replace with your username@hostname
           zuzi = inputs.home-manager.lib.homeManagerConfiguration {
             inherit pkgs;
-            extraSpecialArgs = lib.recursiveUpdate self.nixos-flake.lib.specialArgsFor.common {flake.root = flake-root;};
+            extraSpecialArgs = lib.recursiveUpdate self.nixos-unified.lib.specialArgsFor.common {flake.root = root;};
             modules = [
               {
                 imports = [
@@ -125,7 +124,7 @@
             ];
           };
 
-          "zuzi@ZacharyNixWSL" = self.nixos-flake.lib.mkHomeConfiguration pkgs {
+          "zuzi@ZacharyNixWSL" = self.nixos-unified.lib.mkHomeConfiguration pkgs {
             imports = [
               self.homeManagerModules.standard
               self.homeManagerModules.wsl
@@ -151,14 +150,13 @@
         # NixOS configuration entrypoint
         # Available through 'nixos-rebuild --flake .#your-hostname'
         nixosConfigurations = {
-          fuzzle-server-1 = self.nixos-flake.lib.mkLinuxSystem {
+          fuzzle-server-1 = self.nixos-unified.lib.mkLinuxSystem {home-manager = true;} {
             nix.registry.nixpkgs.flake = inputs.nixpkgs.lib.mkForce inputs.nixpkgs-stable;
             nixpkgs.hostPlatform = "x86_64-linux";
             nixpkgs.flake.source = inputs.nixpkgs.lib.mkForce inputs.nixpkgs-stable.outPath;
             imports = [
               ./nixos/fuzzle-server/configuration.nix
               inputs.lix-module.nixosModules.default
-              self.nixosModules.home-manager
               ({lib, ...}: {
                 home-manager.useGlobalPkgs = lib.mkForce false;
                 home-manager.users.zuzi = {
@@ -172,13 +170,13 @@
             ];
           };
           ZacharyNixWSL =
-            self.nixos-flake.lib.mkLinuxSystem
+            self.nixos-unified.lib.mkLinuxSystem
+            {home-manager = true;}
             {
               nixpkgs.hostPlatform = "x86_64-linux";
               imports = [
                 ./nixos/wsl-laptop/configuration.nix
                 inputs.lix-module.nixosModules.default
-                self.nixosModules.home-manager
                 inputs.nixos-wsl.nixosModules.default
                 {
                   home-manager.users.zuzi = {

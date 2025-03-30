@@ -70,13 +70,29 @@ local spec = {
     end,
   },
   {
-    "hrsh7th/nvim-cmp",
+    "saghen/blink.compat",
+    -- use the latest release, via version = '*', if you also use the latest release for blink.cmp
+    version = "*",
+    -- lazy.nvim will automatically load the plugin when it's required by blink.cmp
+    lazy = true,
+    -- make sure to set opts so that lazy.nvim calls blink.compat's setup
+    opts = {},
+  },
+  {
+    "saghen/blink.cmp",
     dependencies = { "nvim-neorg/neorg" },
-    ---@param opts cmp.ConfigSchema
-    opts = function(_, opts)
-      local cmp = require("cmp")
-      opts.sources = cmp.config.sources(vim.list_extend(opts.sources, { { name = "neorg" } }))
-    end,
+    opts = {
+      sources = {
+        default = { "neorg" },
+        providers = {
+          neorg = {
+            name = "neorg",
+            module = "blink.compat.source",
+          },
+        },
+      },
+    },
+    opts_extend = { "sources.default" },
   },
 }
 
