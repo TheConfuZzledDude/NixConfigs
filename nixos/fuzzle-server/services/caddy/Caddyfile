@@ -111,10 +111,18 @@
 	# 	reverse_proxy localhost:8083
 	# }
 	#
-	# @jellyfin host jellyfin.fuzzle.uk
-	# handle @jellyfin {
-	# 	reverse_proxy localhost:8096
-	# }
+	@jellyfin host jellyfin.fuzzle.uk
+	handle @jellyfin {
+		reverse_proxy localhost:8096
+	}
+
+	@shoko host shoko.fuzzle.uk
+	handle @shoko {
+		basic_auth {
+			Admin {env.SHOKO_PASS}
+		}
+		reverse_proxy localhost:8111
+	}
 
 	@base host fuzzle.uk
 	handle @base {

@@ -1,0 +1,14 @@
+version: "3"
+services:
+  shoko_server:
+    shm_size: 256m
+    container_name: shoko_server
+    image: ghcr.io/shokoanime/server:latest
+    restart: always
+    ports:
+      - "8111:8111"
+    volumes:
+      - "shoko-config:/home/shoko/.shoko"
+      - "/media/Anime:/mnt/anime"
+volumes:
+  shoko-config:
