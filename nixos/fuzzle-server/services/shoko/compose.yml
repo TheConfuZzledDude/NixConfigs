@@ -10,5 +10,6 @@ services:
     volumes:
       - "shoko-config:/home/shoko/.shoko"
       - "/media/Anime:/mnt/anime"
+      - "/mnt/alldebrid:/mnt/alldebrid"
 volumes:
   shoko-config:
