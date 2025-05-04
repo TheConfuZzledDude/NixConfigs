@@ -52,19 +52,15 @@
       ExecStartPre = "/run/current-system/sw/bin/mkdir -p ${mountPoint}";
       ExecStart = ''
         /run/current-system/sw/bin/rclone mount AllDebrid:/ ${mountPoint} \
-            --nodev \
-            --nofail \
-            --allow_other \
-            --args2env \
             --config=${config.sops.templates."rclone.conf".path} \
             --cache-dir=/var/cache/rclone \
-            --dir_cache_time 10s \
-            --multi_thread_streams=0 \
-            --cutoff_mode=cautious \
-            --vfs_cache_mode=minimal \
-            --network_mode \
-            --buffer_size=0 \
-            --read_only
+            --dir-cache-time 10s \
+            --multi-thread-streams=0 \
+            --cutoff-mode=cautious \
+            --vfs-cache-mode=minimal \
+            --network-mode \
+            --buffer-size=0 \
+            --read-only
       '';
     };
   };
