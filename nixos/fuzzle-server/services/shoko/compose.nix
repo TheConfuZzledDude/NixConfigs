@@ -48,11 +48,11 @@
     };
     after = [
       "s3fs_media.service"
+      "alldebrid_mount.service"
       "podman-network-shoko_default.service"
       "podman-volume-shoko_shoko-config.service"
     ];
     requires = [
-      "s3fs_media.service"
       "podman-network-shoko_default.service"
       "podman-volume-shoko_shoko-config.service"
     ];

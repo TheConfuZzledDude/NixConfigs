@@ -40,24 +40,32 @@
     };
   };
 
-  fileSystems."/mnt/alldebrid" = {
-    device = "AllDebrid:/";
-    fsType = "rclone";
-    options = [
-      "nodev"
-      "nofail"
-      "allow_other"
-      "args2env"
-      "config=${config.sops.templates."rclone.conf".path}"
-      "cache-dir=/var/cache/rclone"
-      "dir_cache_time=10s"
-      "multi_thread_streams=0"
-      "cutoff_mode=cautious"
-      "vfs_cache_mode=minimal"
-      "network_mode"
-      "buffer_size=0"
-      "read_only"
-    ];
+  systemd.services.alldebrid_mount = let
+    mountPoint = "/mnt/alldebrid";
+  in {
+    enable = true;
+    wants = ["network-online.target"];
+    after = ["network-online.target"];
+    serviceConfig = {
+      Type = "notify";
+      ExecStartPre = "/run/current-system/sw/bin/mkdir -p ${mountPoint}";
+      ExecStart = ''
+        /run/current-system/sw/bin/rclone mount AllDebrid:/ ${mountPoint} \
+            --nodev \
+            --nofail \
+            --allow_other \
+            --args2env \
+            --config=${config.sops.templates."rclone.conf".path} \
+            --cache-dir=/var/cache/rclone \
+            --dir_cache_time 10s \
+            --multi_thread_streams=0 \
+            --cutoff_mode=cautious \
+            --vfs_cache_mode=minimal \
+            --network_mode \
+            --buffer_size=0 \
+            --read_only
+      '';
+    };
   };
 
   sops.secrets.s3fs_env = {
