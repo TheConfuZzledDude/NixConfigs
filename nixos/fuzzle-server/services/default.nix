@@ -44,10 +44,11 @@
     mountPoint = "/mnt/alldebrid";
   in {
     enable = true;
-    wants = ["network-online.target"];
-    after = ["network-online.target"];
+    wantedBy = ["network-online.target"];
     serviceConfig = {
       Type = "notify";
+      RestartSec = 5;
+      KillMode = "none";
       ExecStartPre = "/run/current-system/sw/bin/mkdir -p ${mountPoint}";
       ExecStart = ''
         /run/current-system/sw/bin/rclone mount AllDebrid:/ ${mountPoint} \
