@@ -34,6 +34,12 @@
     pass = ${config.sops.placeholder."rclone/adPass"}
   '';
 
+  systemd.tmpfiles.settings.rcloneDirs = {
+    "/var/cache/rclone"."d" = {
+      mode = "700";
+    };
+  };
+
   fileSystems."/mnt/alldebrid" = {
     device = "AllDebrid:/";
     fsType = "rclone";
@@ -43,6 +49,7 @@
       "allow_other"
       "args2env"
       "config=${config.sops.templates."rclone.conf".path}"
+      "cache-dir=/var/cache/rclone"
       "dir_cache_time=10s"
       "multi_thread_streams=0"
       "cutoff_mode=cautious"
