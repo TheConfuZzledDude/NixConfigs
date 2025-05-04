@@ -60,7 +60,8 @@
             --vfs-cache-mode=minimal \
             --network-mode \
             --buffer-size=0 \
-            --read-only
+            --read-only \
+            --allow-other
       '';
     };
   };
