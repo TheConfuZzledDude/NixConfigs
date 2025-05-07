@@ -4,6 +4,7 @@
     format = "json";
     path = "/etc/wireguard/mullvad.json";
     mode = "0600";
+    key = "";
   };
 
   systemd.services."wg-netns@.service" = {
