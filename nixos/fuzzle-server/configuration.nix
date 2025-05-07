@@ -107,6 +107,7 @@ in {
       allowedTCPPorts = [53];
     };
   };
+  networking.wireguard.enable = true;
 
   users.users.root.openssh.authorizedKeys.keys = [
     ''ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQDSOwwDF4+bZXHPjOAUnK9zOQAN/A5BHVNhv5YzSfaS5laH3DIen0UV/YJkYoDorZ13cppCqWHXKsjvOjxz2B/A4SluKlPGsS+p81QB/5Pifr3UDvrSul9KmfMLgbGYzCzZmETEIgvIIbuLNAwuvLBbMqWO5JRNwa3p25CPdLc3MyDsthoAuRA9R2WHM1BH9JuaCbEHnR5cZlqhih4VcS7Kjfax1RXX0cjAkTRV//4HxjRfvlNta6O5CmdLnsNSa36UZchw3dLFICKGaEE71O30Tf8TTcxYjYzlUcgdqFpxXO6NNefjOzNOy8Su5L4npWRek7CJoq7wGrH5yXO9SzvwYKSsInTTufNxNEUM7wn075hCFlwE1msDcFeczrl1sCLdt8TqJUHCN0o/XDvCfJ8v6sAe0bN1/O82wsNhXY22B6HlzgSkIZnpVqTRJ0oqJzWyXfZc0LlapTmSjsiDQCMMkUy3qSLTsh18k4bwkgIFWS/70hYdjn7U26KwZZ2TnibOwZiqrW/pVlSIRs5bGI5i1cmEe4+oR/sX1izdwjg2WTeOwuIEPpuIdbT2umvoGslQUBHhVk+ZnNslnIvQfQAPEL/OIWCFJxARD05YsIcqk532EPOluWbBPkdChZfOmE8/DMPKs3kl+cUV9lAXM3U2EDzmFIGE4dMy38tnqAlqfw== theconfuzzleddude@gmail.com''

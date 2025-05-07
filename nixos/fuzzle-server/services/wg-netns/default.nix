@@ -13,7 +13,7 @@
     wantedBy = ["multi-user.target"];
     environment = {
       WG_ENDPOINT_RESOLUTION_RETRIES = "infinity";
-      WG_VERBOSE = 1;
+      WG_VERBOSE = "1";
     };
     serviceConfig = {
       Type = "oneshot";
