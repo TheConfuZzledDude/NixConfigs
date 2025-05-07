@@ -11,7 +11,6 @@
     enable = true;
     wants = ["network-online.target" "nss-lookup.target"];
     after = ["network-online.target" "nss-lookup.target"];
-    wantedBy = ["multi-user.target"];
     environment = {
       WG_ENDPOINT_RESOLUTION_RETRIES = "infinity";
       WG_VERBOSE = "1";
@@ -39,5 +38,9 @@
       RestrictSUIDSGID = true;
       SystemCallArchitectures = "native";
     };
+  };
+  systemd.services."wg-netns@mullvad" = {
+    overrideStrategy = "asDropin";
+    wantedBy = ["multi-user.target"];
   };
 }
