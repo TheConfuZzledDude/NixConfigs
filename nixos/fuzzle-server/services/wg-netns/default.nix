@@ -1,4 +1,4 @@
-{...}: {
+{pkgs, ...}: {
   sops.secrets."mullvad.json" = {
     sopsFile = ./mullvad.json;
     format = "json";
@@ -15,6 +15,10 @@
       WG_ENDPOINT_RESOLUTION_RETRIES = "infinity";
       WG_VERBOSE = "1";
     };
+    path = [
+      pkgs.wireguard
+      pkgs.iproute2
+    ];
     serviceConfig = {
       Type = "oneshot";
       ExecStart = "/run/current-system/sw/bin/wg-netns up %i";
