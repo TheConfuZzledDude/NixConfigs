@@ -1,4 +1,4 @@
-{}: {
+{...}: {
   sops.secrets."mullvad.json" = {
     sopsFile = ./mullvad.json;
     format = "json";
