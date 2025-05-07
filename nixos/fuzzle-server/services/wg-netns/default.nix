@@ -45,6 +45,10 @@
   };
   systemd.services."wg-netns@mullvad" = {
     overrideStrategy = "asDropin";
+    path = [
+      pkgs.wireguard-tools
+      pkgs.iproute2
+    ];
     wantedBy = ["multi-user.target"];
   };
 }
