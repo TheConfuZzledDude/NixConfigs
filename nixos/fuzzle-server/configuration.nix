@@ -152,20 +152,24 @@ in {
 
   environment.variables.EDITOR = "nvim";
 
-  environment.systemPackages = with pkgs; [
-    wezterm
-    zellij
-    eza
-    ripgrep
-    ripgrep-all
-    fish
-    neovim
-    bat
-    git
-    wget
-    curl
-    podman-tui
-  ];
+  environment.systemPackages =
+    (with pkgs; [
+      wezterm
+      zellij
+      eza
+      ripgrep
+      ripgrep-all
+      fish
+      neovim
+      bat
+      git
+      wget
+      curl
+      podman-tui
+    ])
+    ++ [
+      self.packages."x86_64-linux".wg-netns
+    ];
 
   # https://nixos.wiki/wiki/FAQ/When_do_I_update_stateVersion
   system.stateVersion = "24.05";

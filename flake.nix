@@ -26,6 +26,8 @@
       url = "https://git.lix.systems/lix-project/nixos-module/archive/2.92.0-3.tar.gz";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+
+    poetry2nix.url = "github:nix-community/poetry2nix";
   };
 
   nixConfig = {
@@ -63,11 +65,12 @@
 
       _module.args.pkgs = inputs.nixpkgs.legacyPackages;
 
-      perSystem = {
+      perSystem = perSystemInputs @ {
         self',
         pkgs,
         lib,
         system,
+        inputs',
         ...
       }: {
         nixos-unified.primary-inputs = [
@@ -100,7 +103,7 @@
                   '';
                 });
           }
-          // (import ./pkgs);
+          // (import ./pkgs) ({inherit inputs;} // perSystemInputs);
         formatter = pkgs.alejandra;
 
         legacyPackages.homeConfigurations = {
