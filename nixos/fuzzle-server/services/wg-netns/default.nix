@@ -7,7 +7,7 @@
     key = "";
   };
 
-  systemd.services."wg-netns@.service" = {
+  systemd.services."wg-netns@" = {
     enable = true;
     wants = ["network-online.target" "nss-lookup.target"];
     after = ["network-online.target" "nss-lookup.target"];
