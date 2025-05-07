@@ -10,6 +10,7 @@
     ./caddy
     ./foundry
     ./shoko
+    ./wg-netns
   ];
 
   services.tailscale.enable = true;
