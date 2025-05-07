@@ -16,7 +16,7 @@
       WG_VERBOSE = "1";
     };
     path = [
-      pkgs.wireguard
+      pkgs.wireguard-tools
       pkgs.iproute2
     ];
     serviceConfig = {
