@@ -23,6 +23,13 @@
     openFirewall = true;
   };
 
+  services.sonarr.enable = true;
+  services.radarr.enable = true;
+  services.lidarr.enable = true;
+  services.readarr.enable = true;
+  services.jackett.enable = true;
+  services.prowlarr.enable = true;
+
   sops.secrets."rclone/adUser" = {};
   sops.secrets."rclone/adPass" = {};
 
