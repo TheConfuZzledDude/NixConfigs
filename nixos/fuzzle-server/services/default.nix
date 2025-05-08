@@ -11,6 +11,7 @@
     ./foundry
     ./shoko
     ./wg-netns
+    ./rdt-client
   ];
 
   services.tailscale.enable = true;
