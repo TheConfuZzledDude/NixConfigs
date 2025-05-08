@@ -41,7 +41,6 @@
     ];
     log-driver = "journald";
     extraOptions = [
-      "--network-alias=rdtclient"
       "--network=ns:/var/run/netns/mullvad"
     ];
   };
