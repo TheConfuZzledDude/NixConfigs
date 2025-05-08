@@ -42,7 +42,7 @@
     log-driver = "journald";
     extraOptions = [
       "--network-alias=rdtclient"
-      "--network=rdt-client_default"
+      "--network=ns:/var/run/netns/mullvad"
     ];
   };
   systemd.services."podman-rdtclient" = {
