@@ -19,20 +19,20 @@
   #   };
   # };
   #
-  # systemd.services."proxy-to-rdtclient" = {
-  #   enable = true;
-  #   requires = ["podman-rdtclient.service" "proxy-to-rdtclient.socket"];
-  #   after = ["podman-rdtclient.service" "proxy-to-rdtclient.socket"];
-  #   unitConfig.JoinsNamespaceOf = "podman-rdtclient.service";
-  #   serviceConfig = {
-  #     ExecStart = "/run/current-system/sw/lib/systemd/systemd-socket-proxyd --exit-idle-time=5min 127.0.0.1:6500";
-  #     PrivateNetwork = "yes";
-  #   };
-  # };
-  #
-  # systemd.sockets."proxy-to-rdtclient" = {
-  #   enable = true;
-  #   listenStreams = ["6500"];
-  #   wantedBy = ["sockets.target"];
-  # };
+  systemd.services."proxy-to-rdtclient" = {
+    enable = true;
+    requires = ["podman-rdtclient.service" "proxy-to-rdtclient.socket"];
+    after = ["podman-rdtclient.service" "proxy-to-rdtclient.socket"];
+    serviceConfig = {
+      ExecStart = "/run/current-system/sw/lib/systemd/systemd-socket-proxyd --exit-idle-time=5min 127.0.0.1:6500";
+      NetworkNamespacePath = "/var/run/netns/mullvad";
+      PrivateNetwork = "yes";
+    };
+  };
+
+  systemd.sockets."proxy-to-rdtclient" = {
+    enable = true;
+    listenStreams = ["6500"];
+    wantedBy = ["sockets.target"];
+  };
 }
