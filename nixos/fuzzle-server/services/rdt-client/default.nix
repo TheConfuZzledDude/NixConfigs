@@ -16,14 +16,10 @@
     enable = true;
     requires = ["podman-rdtclient.service"];
     after = ["podman-rdtclient.service"];
-    path = [
-      pkgs.iproute2
-      pkgs.socat
-    ];
     serviceConfig = {
       Type = "simple";
       ExecStart = ''
-        socat tcp-listen:"6500",reuseaddr,fork "exec:ip netns exec mullvad socat stdio 'tcp-connect:6500',nofork"
+        ${pkgs.socat}/bin/socat tcp-listen:"6500",reuseaddr,fork "exec:${pkgs.iproute2}/bin/ip netns exec mullvad ${pkgs.socat}/bin/socat stdio 'tcp-connect:6500',nofork"
       '';
       Restart = "on-failure";
     };
