@@ -14,14 +14,15 @@
 
   systemd.services."proxy-to-rdtclient" = {
     enable = true;
-    requires = ["podman-rdtclient.service" "proxy-to-rdtclient.socket"];
-    after = ["podman-rdtclient.service" "proxy-to-rdtclient.socket"];
+    requires = ["podman-rdtclient.service"];
+    after = ["podman-rdtclient.service"];
     serviceConfig = {
+      Type = "simple";
       ExecStart = ''
         socat tcp-listen:"6500",reuseaddr,fork "exec:ip netns exec mullvad socat stdio 'tcp-connect:6500',nofork"
       '';
-      NetworkNamespacePath = "/var/run/netns/mullvad";
-      PrivateNetwork = "yes";
+      Restart = "on-failure";
     };
+    wantedBy = ["multi-user.target"];
   };
 }
