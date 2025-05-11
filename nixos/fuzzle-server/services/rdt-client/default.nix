@@ -16,6 +16,10 @@
     enable = true;
     requires = ["podman-rdtclient.service"];
     after = ["podman-rdtclient.service"];
+    path = [
+      pkgs.iproute2
+      pkgs.socat
+    ];
     serviceConfig = {
       Type = "simple";
       ExecStart = ''
@@ -25,4 +29,8 @@
     };
     wantedBy = ["multi-user.target"];
   };
+
+  environment.systemPackages = [
+    pkgs.socat
+  ];
 }
