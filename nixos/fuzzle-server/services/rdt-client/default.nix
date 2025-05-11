@@ -12,27 +12,16 @@
     ./compose.nix
   ];
 
-  # systemd.services."podman-rdtclient" = {
-  #   serviceConfig = {
-  #     NetworkNamespacePath = "/var/run/netns/mullvad";
-  #     BindReadOnlyPaths = "/etc/netns/mullvad/resolv.conf:/etc/resolv.conf:norbind";
-  #   };
-  # };
-  #
   systemd.services."proxy-to-rdtclient" = {
     enable = true;
     requires = ["podman-rdtclient.service" "proxy-to-rdtclient.socket"];
     after = ["podman-rdtclient.service" "proxy-to-rdtclient.socket"];
     serviceConfig = {
-      ExecStart = "/run/current-system/sw/lib/systemd/systemd-socket-proxyd --exit-idle-time=5min 127.0.0.1:6500";
+      ExecStart = ''
+        socat tcp-listen:"6500",reuseaddr,fork "exec:ip netns exec mullvad socat stdio 'tcp-connect:6500',nofork"
+      '';
       NetworkNamespacePath = "/var/run/netns/mullvad";
       PrivateNetwork = "yes";
     };
-  };
-
-  systemd.sockets."proxy-to-rdtclient" = {
-    enable = true;
-    listenStreams = ["6500"];
-    wantedBy = ["sockets.target"];
   };
 }
