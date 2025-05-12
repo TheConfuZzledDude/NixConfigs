@@ -57,9 +57,11 @@
     serviceConfig = {
       Type = "notify";
       RestartSec = 5;
+      NetworkNamespacePath = "/var/run/netns/mullvad";
+      BindReadOnlyPaths = "/etc/netns/mullvad/resolv.conf:/etc/resolv.conf:norbind";
       ExecStartPre = "/run/current-system/sw/bin/mkdir -p ${mountPoint}";
       ExecStart = ''
-        /run/current-system/sw/bin/ip netns exec mullvad /run/current-system/sw/bin/rclone mount AllDebrid:/ ${mountPoint} \
+        /run/current-system/sw/bin/rclone mount AllDebrid:/ ${mountPoint} \
             --config=${config.sops.templates."rclone.conf".path} \
             --cache-dir=/var/cache/rclone \
             --dir-cache-time 10s \
