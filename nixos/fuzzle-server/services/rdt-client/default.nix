@@ -19,7 +19,7 @@
     serviceConfig = {
       Type = "simple";
       ExecStart = ''
-        ${pkgs.socat}/bin/socat tcp-listen:"6500",reuseaddr,fork "exec:${pkgs.iproute2}/bin/ip netns exec mullvad ${pkgs.socat}/bin/socat stdio 'tcp-connect:127.0.0.1:6500',nofork"
+        ${pkgs.socat}/bin/socat tcp-listen:"6500",reuseaddr,fork "exec:${pkgs.iproute2}/bin/ip netns exec mullvad ${pkgs.socat}/bin/socat stdio 'tcp-connect:[::1]:6500',nofork"
       '';
       Restart = "on-failure";
     };
