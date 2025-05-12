@@ -59,6 +59,7 @@
       RestartSec = 5;
       NetworkNamespacePath = "/var/run/netns/mullvad";
       BindReadOnlyPaths = "/etc/netns/mullvad/resolv.conf:/etc/resolv.conf:norbind";
+      BindPaths = "/mnt/alldebrid:/mnt/alldebrid:rbind";
       ExecStartPre = "/run/current-system/sw/bin/mkdir -p ${mountPoint}";
       ExecStart = ''
         /run/current-system/sw/bin/rclone mount AllDebrid:/ ${mountPoint} \
