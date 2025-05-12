@@ -57,7 +57,6 @@
     serviceConfig = {
       Type = "notify";
       RestartSec = 5;
-      KillMode = "none";
       ExecStartPre = "/run/current-system/sw/bin/mkdir -p ${mountPoint}";
       ExecStart = ''
         /run/current-system/sw/bin/ip netns exec mullvad /run/current-system/sw/bin/rclone mount AllDebrid:/ ${mountPoint} \
