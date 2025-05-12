@@ -12,6 +12,7 @@
     ./shoko
     ./wg-netns
     ./rdt-client
+    ./gluetun
   ];
 
   services.tailscale.enable = true;
@@ -51,15 +52,17 @@
 
   systemd.services.alldebrid_mount = let
     mountPoint = "/mnt/alldebrid";
+    proxy_addr = "127.0.0.1:8888";
   in {
     enable = true;
     wantedBy = ["network-online.target"];
+    environment = {
+      http_proxy = proxy_addr;
+      https_proxy = proxy_addr;
+    };
     serviceConfig = {
       Type = "notify";
       RestartSec = 5;
-      NetworkNamespacePath = "/var/run/netns/mullvad";
-      BindReadOnlyPaths = "/etc/netns/mullvad/resolv.conf:/etc/resolv.conf:norbind";
-      BindPaths = "/mnt/alldebrid:/mnt/alldebrid:rbind";
       ExecStartPre = "/run/current-system/sw/bin/mkdir -p ${mountPoint}";
       ExecStart = ''
         /run/current-system/sw/bin/rclone mount AllDebrid:/ ${mountPoint} \
