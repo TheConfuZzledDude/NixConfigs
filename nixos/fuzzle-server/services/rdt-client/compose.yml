@@ -11,6 +11,7 @@ services:
     volumes:
       - rdt-client-data:/data/db
       - /mnt/alldebrid:/mnt/alldebrid
+      - /mnt/rdt-download:/mnt/rdt-download
     logging:
       driver: json-file
       options:
