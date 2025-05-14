@@ -16,8 +16,7 @@ services:
       driver: json-file
       options:
         max-size: 10m
-    ports:
-      - 6500:6500
     restart: unless-stopped
+    network_mode: "container:gluetun"
 volumes:
   rdt-client-data:

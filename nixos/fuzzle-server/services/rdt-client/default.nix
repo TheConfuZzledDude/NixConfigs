@@ -12,21 +12,21 @@
     ./compose.nix
   ];
 
-  systemd.services."proxy-to-rdtclient" = {
-    enable = true;
-    requires = ["podman-rdtclient.service"];
-    after = ["podman-rdtclient.service"];
-    serviceConfig = {
-      Type = "simple";
-      ExecStart = ''
-        ${pkgs.socat}/bin/socat tcp-listen:"6500",reuseaddr,fork "exec:${pkgs.iproute2}/bin/ip netns exec mullvad ${pkgs.socat}/bin/socat stdio 'tcp-connect:[::1]:6500',nofork"
-      '';
-      Restart = "on-failure";
-    };
-    wantedBy = ["multi-user.target"];
-  };
-
-  environment.systemPackages = [
-    pkgs.socat
-  ];
+  # systemd.services."proxy-to-rdtclient" = {
+  #   enable = true;
+  #   requires = ["podman-rdtclient.service"];
+  #   after = ["podman-rdtclient.service"];
+  #   serviceConfig = {
+  #     Type = "simple";
+  #     ExecStart = ''
+  #       ${pkgs.socat}/bin/socat tcp-listen:"6500",reuseaddr,fork "exec:${pkgs.iproute2}/bin/ip netns exec mullvad ${pkgs.socat}/bin/socat stdio 'tcp-connect:[::1]:6500',nofork"
+  #     '';
+  #     Restart = "on-failure";
+  #   };
+  #   wantedBy = ["multi-user.target"];
+  # };
+  #
+  # environment.systemPackages = [
+  #   pkgs.socat
+  # ];
 }

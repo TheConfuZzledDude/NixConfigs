@@ -31,13 +31,12 @@
       "/mnt/rdt-download:/mnt/rdt-download:rw"
       "rdt-client_rdt-client-data:/data/db:rw"
     ];
-    ports = [
-      "6500:6500/tcp"
+    dependsOn = [
+      "gluetun"
     ];
     log-driver = "journald";
     extraOptions = [
-      "--network-alias=rdtclient"
-      "--network=rdt-client_default"
+      "--network=container:gluetun"
     ];
   };
   systemd.services."podman-rdtclient" = {
@@ -45,11 +44,9 @@
       Restart = lib.mkOverride 90 "always";
     };
     after = [
-      "podman-network-rdt-client_default.service"
       "podman-volume-rdt-client_rdt-client-data.service"
     ];
     requires = [
-      "podman-network-rdt-client_default.service"
       "podman-volume-rdt-client_rdt-client-data.service"
     ];
     partOf = [
@@ -58,21 +55,6 @@
     wantedBy = [
       "podman-compose-rdt-client-root.target"
     ];
-  };
-
-  # Networks
-  systemd.services."podman-network-rdt-client_default" = {
-    path = [ pkgs.podman ];
-    serviceConfig = {
-      Type = "oneshot";
-      RemainAfterExit = true;
-      ExecStop = "podman network rm -f rdt-client_default";
-    };
-    script = ''
-      podman network inspect rdt-client_default || podman network create rdt-client_default
-    '';
-    partOf = [ "podman-compose-rdt-client-root.target" ];
-    wantedBy = [ "podman-compose-rdt-client-root.target" ];
   };
 
   # Volumes
