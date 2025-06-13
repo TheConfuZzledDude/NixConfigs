@@ -14,7 +14,6 @@
   home.packages = with pkgs; [
     home-manager
     gitFull
-    gcc
     gitui
     openssh
     gpg-tui

@@ -1,5 +1,5 @@
-# Auto-generated using compose2nix v0.2.2-pre.
-{ pkgs, lib, ... }:
+# Auto-generated using compose2nix v0.3.2-pre.
+{ pkgs, lib, config, ... }:
 
 {
   # Runtime
@@ -7,11 +7,15 @@
     enable = true;
     autoPrune.enable = true;
     dockerCompat = true;
-    defaultNetwork.settings = {
-      # Required for container networking to be able to use names.
-      dns_enabled = true;
-    };
   };
+
+  # Enable container name DNS for all Podman networks.
+  networking.firewall.interfaces = let
+    matchAll = if !config.networking.nftables.enable then "podman+" else "podman*";
+  in {
+    "${matchAll}".allowedUDPPorts = [ 53 ];
+  };
+
   virtualisation.oci-containers.backend = "podman";
 
   # Containers
@@ -23,6 +27,7 @@
     ports = [
       "30000:30000/tcp"
     ];
+    user = "421:421";
     log-driver = "journald";
     extraOptions = [
       "--hostname=foundry.fuzzle.uk"
@@ -32,7 +37,7 @@
   };
   systemd.services."podman-foundry-container-foundry" = {
     serviceConfig = {
-      Restart = lib.mkOverride 500 "no";
+      Restart = lib.mkOverride 90 "no";
     };
     after = [
       "podman-network-foundry-container_default.service"
