@@ -10,8 +10,7 @@ services:
       - TZ=Europe/London
     volumes:
       - rdt-client-data:/data/db
-      - /mnt/alldebrid:/mnt/alldebrid
-      - /mnt/rdt-download:/mnt/rdt-download
+      - /var/rdt-download:/var/rdt-download
     logging:
       driver: json-file
       options:

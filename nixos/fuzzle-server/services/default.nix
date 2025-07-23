@@ -31,6 +31,7 @@
   services.readarr.enable = true;
   services.jackett.enable = true;
   services.prowlarr.enable = true;
+  services.kavita.enable = true;
 
   sops.secrets."rclone/adUser" = {};
   sops.secrets."rclone/adPass" = {};
