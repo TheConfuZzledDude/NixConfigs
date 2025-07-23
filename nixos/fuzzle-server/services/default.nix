@@ -31,10 +31,13 @@
   services.readarr.enable = true;
   services.jackett.enable = true;
   services.prowlarr.enable = true;
-  services.kavita.enable = true;
 
   sops.secrets."rclone/adUser" = {};
   sops.secrets."rclone/adPass" = {};
+  
+  services.kavita.enable = true;
+  sops.secrets."kavita/token" = {};
+  services.kavita.tokenKeyFile = config.sops.secrets."kavita/token".path;
 
   sops.templates."rclone.conf".content = ''
     [AllDebrid]
