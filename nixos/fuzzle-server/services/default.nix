@@ -10,7 +10,7 @@
     ./caddy
     ./foundry
     ./shoko
-    ./wg-netns
+    # ./wg-netns
     ./rdt-client
     ./gluetun
   ];

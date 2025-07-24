@@ -169,7 +169,7 @@ in {
       podman-tui
     ])
     ++ [
-      self.packages."x86_64-linux".wg-netns
+      # self.packages."x86_64-linux".wg-netns
     ];
 
   # https://nixos.wiki/wiki/FAQ/When_do_I_update_stateVersion
