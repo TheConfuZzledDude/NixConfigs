@@ -154,9 +154,9 @@
         # Available through 'nixos-rebuild --flake .#your-hostname'
         nixosConfigurations = {
           fuzzle-server-1 = self.nixos-unified.lib.mkLinuxSystem {home-manager = true;} {
-            nix.registry.nixpkgs.flake = inputs.nixpkgs.lib.mkForce inputs.nixpkgs-stable;
+            nix.registry.nixpkgs.flake = inputs.nixpkgs.lib.mkForce inputs.nixpkgs;
             nixpkgs.hostPlatform = "x86_64-linux";
-            nixpkgs.flake.source = inputs.nixpkgs.lib.mkForce inputs.nixpkgs-stable.outPath;
+            nixpkgs.flake.source = inputs.nixpkgs.lib.mkForce inputs.nixpkgs.outPath;
             imports = [
               ./nixos/fuzzle-server/configuration.nix
               inputs.lix-module.nixosModules.default
