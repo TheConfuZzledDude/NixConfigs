@@ -27,6 +27,7 @@
       "TZ" = "Europe/London";
     };
     volumes = [
+      "/media/:/media:rw"
       "/var/rdt-download:/var/rdt-download:rw"
       "rdt-client_rdt-client-data:/data/db:rw"
     ];

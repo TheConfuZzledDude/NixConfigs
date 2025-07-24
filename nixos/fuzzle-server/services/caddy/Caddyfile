@@ -124,6 +124,12 @@
 		reverse_proxy localhost:8111
 	}
 
+	@kavita host kavita.fuzzle.uk
+	handle @kavita {
+		encode gzip
+		reverse_proxy localhost:5000
+	}
+
 	@base host fuzzle.uk
 	handle @base {
 		# @matrix {
