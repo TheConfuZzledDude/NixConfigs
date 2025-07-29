@@ -90,6 +90,8 @@
     restartUnits = ["s3fs_media.service"];
   };
 
+  programs.fuse.userAllowOther = true;
+
   systemd.services.s3fs_media = let
     mountPoint = "/media";
   in {
@@ -102,7 +104,7 @@
       EnvironmentFile = "${config.sops.secrets.s3fs_env.path}";
       ExecStartPre = "/run/current-system/sw/bin/mkdir -p ${mountPoint}";
       ExecStart = ''
-        /run/current-system/sw/bin/s3fs ''${BUCKET_NAME}:/ ${mountPoint} -o url=''${BUCKET_URL} -o use_cache=/tmp -o allow_other -o use_path_request_style
+        /run/current-system/sw/bin/s3fs ''${BUCKET_NAME}:/ ${mountPoint} -o url=''${BUCKET_URL} -o use_cache=/tmp -o allow_other -o umask=000 -o use_path_request_style
       '';
       ExecStop = "/run/wrappers/bin/fusermount -u ${mountPoint}";
     };
