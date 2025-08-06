@@ -22,7 +22,7 @@
   virtualisation.oci-containers.containers."foundry-container-foundry" = {
     image = "felddy/foundryvtt:release";
     environment = {
-      "FOUNDRY_AWS_CONFIG" = "/run/secrets/foundry-aws";
+      "FOUNDRY_AWS_CONFIG" = "/run/aws.json";
     };
     volumes = [
       "/run/secrets/foundry-aws:/run/aws.json:rw"
@@ -68,7 +68,7 @@
       "foundry-container_baylok-data:/data:rw"
     ];
     ports = [
-      "30001:30001/tcp"
+      "30000:30001/tcp"
     ];
     user = "421:421";
     log-driver = "journald";
