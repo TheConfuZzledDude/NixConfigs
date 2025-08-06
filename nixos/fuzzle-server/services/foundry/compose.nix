@@ -21,7 +21,11 @@
   # Containers
   virtualisation.oci-containers.containers."foundry-container-foundry" = {
     image = "felddy/foundryvtt:release";
+    environment = {
+      "FOUNDRY_AWS_CONFIG" = "/run/secrets/foundry-aws";
+    };
     volumes = [
+      "/run/secrets/foundry-aws:/run/aws.json:rw"
       "foundry-container_foundry-data:/data:rw"
     ];
     ports = [
@@ -54,6 +58,45 @@
       "podman-compose-foundry-container-root.target"
     ];
   };
+  virtualisation.oci-containers.containers."foundry-container-foundry2" = {
+    image = "felddy/foundryvtt:release";
+    environment = {
+      "FOUNDRY_AWS_CONFIG" = "/run/aws.json";
+    };
+    volumes = [
+      "/run/secrets/foundry-aws:/run/aws.json:rw"
+      "foundry-container_baylok-data:/data:rw"
+    ];
+    ports = [
+      "30001:30001/tcp"
+    ];
+    user = "421:421";
+    log-driver = "journald";
+    extraOptions = [
+      "--hostname=foundry-baylok.fuzzle.uk"
+      "--network-alias=foundry2"
+      "--network=foundry-container_default"
+    ];
+  };
+  systemd.services."podman-foundry-container-foundry2" = {
+    serviceConfig = {
+      Restart = lib.mkOverride 90 "no";
+    };
+    after = [
+      "podman-network-foundry-container_default.service"
+      "podman-volume-foundry-container_baylok-data.service"
+    ];
+    requires = [
+      "podman-network-foundry-container_default.service"
+      "podman-volume-foundry-container_baylok-data.service"
+    ];
+    partOf = [
+      "podman-compose-foundry-container-root.target"
+    ];
+    wantedBy = [
+      "podman-compose-foundry-container-root.target"
+    ];
+  };
 
   # Networks
   systemd.services."podman-network-foundry-container_default" = {
@@ -71,6 +114,18 @@
   };
 
   # Volumes
+  systemd.services."podman-volume-foundry-container_baylok-data" = {
+    path = [ pkgs.podman ];
+    serviceConfig = {
+      Type = "oneshot";
+      RemainAfterExit = true;
+    };
+    script = ''
+      podman volume inspect foundry-container_baylok-data || podman volume create foundry-container_baylok-data
+    '';
+    partOf = [ "podman-compose-foundry-container-root.target" ];
+    wantedBy = [ "podman-compose-foundry-container-root.target" ];
+  };
   systemd.services."podman-volume-foundry-container_foundry-data" = {
     path = [ pkgs.podman ];
     serviceConfig = {

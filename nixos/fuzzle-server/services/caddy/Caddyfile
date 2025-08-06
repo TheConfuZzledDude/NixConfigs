@@ -78,6 +78,11 @@
 		reverse_proxy localhost:30000
 	}
 
+	@baylok-foundry host baylok-foundry.fuzzle.uk
+	handle @baylok-foundry {
+		reverse_proxy localhost:30001
+	}
+
 	@bitwarden host bitwarden.fuzzle.uk
 	handle @bitwarden {
 		reverse_proxy localhost:8950
