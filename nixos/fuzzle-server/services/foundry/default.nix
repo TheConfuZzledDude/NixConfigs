@@ -11,12 +11,13 @@
     restartUnits = ["podman-foundry-container-foundry.service"];
   };
 
-    sops.secrets.foundry-aws = {
-        sopsFile = ./aws.json;
-        uid = 421;
-        restartUnits = ["podman-foundry-container-foundry.service"];
-        format = "json";
-    };
+  sops.secrets.foundry-aws = {
+    sopsFile = ./aws.json;
+    uid = 421;
+    key = "";
+    restartUnits = ["podman-foundry-container-foundry.service"];
+    format = "json";
+  };
 
   virtualisation.oci-containers.containers."foundry-container-foundry".environmentFiles = [
     config.sops.secrets.foundry-env.path
