@@ -68,7 +68,7 @@
       "foundry-container_baylok-data:/data:rw"
     ];
     ports = [
-      "30000:30001/tcp"
+      "30001:30000/tcp"
     ];
     user = "421:421";
     log-driver = "journald";
