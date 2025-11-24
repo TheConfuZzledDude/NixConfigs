@@ -22,11 +22,6 @@
 
     neovim-nightly-overlay.url = "github:nix-community/neovim-nightly-overlay";
 
-    lix-module = {
-      url = "https://git.lix.systems/lix-project/nixos-module/archive/2.93.3-1.tar.gz";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-
     poetry2nix.url = "github:nix-community/poetry2nix";
   };
 
@@ -159,7 +154,6 @@
             nixpkgs.flake.source = inputs.nixpkgs.lib.mkForce inputs.nixpkgs.outPath;
             imports = [
               ./nixos/fuzzle-server/configuration.nix
-              inputs.lix-module.nixosModules.default
               ({lib, ...}: {
                 home-manager.useGlobalPkgs = lib.mkForce false;
                 home-manager.users.zuzi = {
@@ -179,7 +173,6 @@
               nixpkgs.hostPlatform = "x86_64-linux";
               imports = [
                 ./nixos/wsl-laptop/configuration.nix
-                inputs.lix-module.nixosModules.default
                 inputs.nixos-wsl.nixosModules.default
                 {
                   home-manager.users.zuzi = {

@@ -38,7 +38,13 @@ in {
 
   nixpkgs = {
     # You can add overlays here
-    overlays = [];
+    overlays = [(final: prev: {
+            inherit (prev.lixPackageSets.stable)
+                nixpkgs-review
+            nix-eval-jobs
+            nix-fast-build
+            colmena;
+        })];
     # Configure your nixpkgs instance
     config = {
       # Disable if you don't want unfree packages
@@ -49,6 +55,7 @@ in {
   nix = let
     flakeInputs = lib.filterAttrs (_: lib.isType "flake") inputs;
   in rec {
+        package = pkgs.lixPackageSets.stable.lix;
     settings = {
       # Enable flakes and new 'nix' command
       experimental-features = "nix-command flakes";
